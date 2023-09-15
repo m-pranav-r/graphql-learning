@@ -16,5 +16,4 @@ type Mutation {
 
 type Query {
   feed: [Link!]!
-  link(id: Int!): [Link!]!
 }
