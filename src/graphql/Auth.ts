@@ -25,16 +25,12 @@ export const AuthMutation = extendType({
                 name: nonNull(stringArg())
             },
             async resolve(parent, args, context) {
-                console.log("signup resolve start");
                 const { email, name } = args
                 const password = await bcrypt.hash(args.password, 10)
-                console.log("user resolve start");
-
                 const user = await context.prisma.user.create({
                     data: { email, name, password }
                 })
                 const token = jwt.sign({ userId: user.id }, APP_SECRET)
-
                 return {
                     token,
                     user

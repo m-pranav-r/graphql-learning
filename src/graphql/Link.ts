@@ -14,6 +14,14 @@ export const Link = objectType({
                     .postedBy()
             }
         })
+        t.nonNull.list.nonNull.field("voters", {
+            type: "User",
+            resolve(parent, args, context) {
+                return context.prisma.link
+                    .findUnique({ where: { id: parent.id } })
+                    .voters()
+            }
+        })
     },
 })
 
@@ -50,7 +58,7 @@ export const LinkMutation = extendType({
                         description: description,
                         url: url,
                         postedBy: { connect: { id: userId } },
-                        createdAt: new Date().toISOString()
+                        //createdAt: new Date().toISOString()
                     }
                 })
                 return newLink

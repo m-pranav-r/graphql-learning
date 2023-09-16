@@ -1,6 +1,4 @@
 import { objectType } from "nexus"
-import { NexusObjectTypeDef } from "nexus/dist/core"
-import { NexusGenObjects } from "../../nexus-typegen"
 
 export const User = objectType({
     name: "User",
@@ -10,12 +8,21 @@ export const User = objectType({
         t.nonNull.string("email")
         t.nonNull.list.nonNull.field("links", {
             type: "Link",
+            // @ts-ignore
             async resolve(parent, args, context) {
-                console.log("Resolving links...")
-                let links = context.prisma.user
+                return context.prisma.user
                     .findUnique({ where: { id: parent.id } })
                     .links()
             },
+        })
+        t.nonNull.list.nonNull.field("votes", {
+            type: "Link",
+            // @ts-ignore
+            resolve(parent, args, context) {
+                return context.prisma.user
+                    .findUnique({ where: { id: parent.id } })
+                    .votes()
+            }
         })
     }
 })
